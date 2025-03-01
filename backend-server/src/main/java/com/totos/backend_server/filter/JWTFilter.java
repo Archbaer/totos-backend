@@ -22,24 +22,40 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
+        System.out.println("JWTFilter - Path: " + path + " - Skipping: " + path.startsWith("/api/auth/"));
         return path.startsWith("/api/auth/"); // Skip all /api/auth/** endpoints
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-        String header = request.getHeader("Authorization");
+        try {
+            // Get the Authorization header
+            String header = request.getHeader("Authorization");
+            System.out.println("Authorization header: " + header);
 
-        if (header != null && header.startsWith("Bearer ")) {
-            String token = header.substring(7);
-            if (jwtService.validateToken(token)) {
-                SecurityContextHolder.getContext().setAuthentication(
-                        new UsernamePasswordAuthenticationToken(jwtService.getUsername(token), null, new ArrayList<>())
-                );
+            // Check if the Authorization header is present and starts with "Bearer "
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7); // Extract token
+                System.out.println("Processing token");
+
+                // Validate the token
+                if (jwtService.validateToken(token, jwtService.getUsername(token))) {
+                    // Set authentication in the SecurityContext
+                    String username = jwtService.getUsername(token);
+                    System.out.println("Username from token: " + username);
+
+                    // Here we create a UsernamePasswordAuthenticationToken
+                    UsernamePasswordAuthenticationToken authenticationToken =
+                            new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }
             }
+        } catch (Exception e) {
+            System.out.println("JWTFilter error: " + e.getMessage());
+            e.printStackTrace();
         }
+
         chain.doFilter(request, response);
     }
-
-
 }
