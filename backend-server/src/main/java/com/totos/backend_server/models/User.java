@@ -1,6 +1,8 @@
 package com.totos.backend_server.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,18 +22,20 @@ public class User implements UserDetails {
 
     @Setter
     @Getter
+    @NotNull
     @Column(nullable = false, unique = true)
     private String username;
 
     @Setter
     @Getter
+    @NotNull
     @Column(nullable = false)
     private String password;
 
     @Setter
     @Getter
-    @Column(nullable = false, unique = true)
-    private String email;
+    @Column(nullable = false)
+    private String role; // Example: "ADMIN", "USER"
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
