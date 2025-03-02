@@ -6,9 +6,12 @@ import com.totos.backend_server.services.JWTService;
 import com.totos.backend_server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.PublicKey;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -60,15 +63,24 @@ public class UserController {
             return ResponseEntity.status(401).body("Invalid credentials!");
         }
 
-        String token = jwtService.generateToken(user.getUsername());
+        String token = jwtService.generateToken(existingUser);
         Map<String, String> response = new HashMap<>();
         response.put("token", "Bearer " + token);
         return ResponseEntity.ok(response);
     }
 
+    //Protected endpoint, accessible only using JWT token
     @GetMapping("/secured")
     public ResponseEntity<String> protectedEndpoint() {
         return ResponseEntity.ok("Welcome to secured endpoint");
+    }
+
+    @PreAuthorize("hasRole('API')")
+    @GetMapping("/public-key")
+    public String getPublicKey() {
+        PublicKey publicKey = jwtService.getPublicKey();
+        System.out.println("Working!");
+        return Base64.getEncoder().encodeToString(publicKey.getEncoded());
     }
 
 //    @PostMapping("/login")
