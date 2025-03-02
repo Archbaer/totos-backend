@@ -45,62 +45,67 @@ public class UserController {
         return ResponseEntity.ok("User registered successfully");
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<?> login(@RequestBody User user) {
-//        System.out.println("Login request received for: " + user.getUsername());
-//        Optional<User> existingUserOptional = userRepository.findByUsername(user.getUsername());
-//
-//        if (existingUserOptional.isEmpty()) {
-//            return ResponseEntity.status(401).body("Invalid credentials!");
-//        }
-//
-//        User existingUser = existingUserOptional.get();
-//
-//        if (!passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
-//            return ResponseEntity.status(401).body("Invalid credentials!");
-//        }
-//
-//        String token = jwtService.generateToken(user.getUsername());
-//        Map<String, String> response = new HashMap<>();
-//        response.put("token", "Bearer " + token);
-//        return ResponseEntity.ok(response);
-//    }
-
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
-        System.out.println("Login request received with credentials: "+ credentials);
-
-        String username = credentials.get("username");
-        String password = credentials.get("password");
-
-        if (username == null || password == null) {
-            return ResponseEntity.badRequest().body("Username and password are required.");
-        }
-
-        System.out.println("Step 1");
-
-        Optional<User> existingUserOptional = userRepository.findByUsername(username);
+    public ResponseEntity<?> login(@RequestBody User user) {
+        System.out.println("Login request received for: " + user.getUsername());
+        Optional<User> existingUserOptional = userRepository.findByUsername(user.getUsername());
 
         if (existingUserOptional.isEmpty()) {
             return ResponseEntity.status(401).body("Invalid credentials!");
         }
 
-        System.out.println("Step 2");
-
         User existingUser = existingUserOptional.get();
 
-        if (!passwordEncoder.matches(password, existingUser.getPassword())) {
+        if (!passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
             return ResponseEntity.status(401).body("Invalid credentials!");
         }
 
-        System.out.println("Step 3");
-
-        String token = jwtService.generateToken(username);
+        String token = jwtService.generateToken(user.getUsername());
         Map<String, String> response = new HashMap<>();
-
-        System.out.println("Step 4");
-
-        response.put("token", "Bearer "+ token);
+        response.put("token", "Bearer " + token);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/secured")
+    public ResponseEntity<String> protectedEndpoint() {
+        return ResponseEntity.ok("Welcome to secured endpoint");
+    }
+
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
+//        System.out.println("Login request received with credentials: "+ credentials);
+//
+//        String username = credentials.get("username");
+//        String password = credentials.get("password");
+//
+//        if (username == null || password == null) {
+//            return ResponseEntity.badRequest().body("Username and password are required.");
+//        }
+//
+//        System.out.println("Step 1");
+//
+//        Optional<User> existingUserOptional = userRepository.findByUsername(username);
+//
+//        if (existingUserOptional.isEmpty()) {
+//            return ResponseEntity.status(401).body("Invalid credentials!");
+//        }
+//
+//        System.out.println("Step 2");
+//
+//        User existingUser = existingUserOptional.get();
+//
+//        if (!passwordEncoder.matches(password, existingUser.getPassword())) {
+//            return ResponseEntity.status(401).body("Invalid credentials!");
+//        }
+//
+//        System.out.println("Step 3");
+//
+//        String token = jwtService.generateToken(username);
+//        Map<String, String> response = new HashMap<>();
+//
+//        System.out.println("Step 4");
+//
+//        response.put("token", "Bearer "+ token);
+//        return ResponseEntity.ok(response);
+//    }
 }
