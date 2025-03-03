@@ -18,7 +18,6 @@ public class JWTService {
     private final long EXPIRATION_MS = 3600000; // 1 hour
 
     public String generateToken(User user) {
-        System.out.println("Generating token with role: "+ user.getRole());
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .claim("role", user.getRole())
