@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.PublicKey;
 import java.util.Base64;
 import java.util.HashMap;
@@ -75,6 +74,7 @@ public class UserController {
         return ResponseEntity.ok("Welcome to secured endpoint");
     }
 
+    // Protected endpoint, accessible only to specified role
     @PreAuthorize("hasRole('API')")
     @GetMapping("/public-key")
     public String getPublicKey() {
@@ -83,41 +83,4 @@ public class UserController {
         return Base64.getEncoder().encodeToString(publicKey.getEncoded());
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
-//        System.out.println("Login request received with credentials: "+ credentials);
-//
-//        String username = credentials.get("username");
-//        String password = credentials.get("password");
-//
-//        if (username == null || password == null) {
-//            return ResponseEntity.badRequest().body("Username and password are required.");
-//        }
-//
-//        System.out.println("Step 1");
-//
-//        Optional<User> existingUserOptional = userRepository.findByUsername(username);
-//
-//        if (existingUserOptional.isEmpty()) {
-//            return ResponseEntity.status(401).body("Invalid credentials!");
-//        }
-//
-//        System.out.println("Step 2");
-//
-//        User existingUser = existingUserOptional.get();
-//
-//        if (!passwordEncoder.matches(password, existingUser.getPassword())) {
-//            return ResponseEntity.status(401).body("Invalid credentials!");
-//        }
-//
-//        System.out.println("Step 3");
-//
-//        String token = jwtService.generateToken(username);
-//        Map<String, String> response = new HashMap<>();
-//
-//        System.out.println("Step 4");
-//
-//        response.put("token", "Bearer "+ token);
-//        return ResponseEntity.ok(response);
-//    }
 }
