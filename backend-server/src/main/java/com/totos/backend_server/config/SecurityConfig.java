@@ -39,6 +39,21 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * .cors(cors -> cors.configurationSource(request -> {
+     *                 CorsConfiguration config = new CorsConfiguration();
+     *                 config.setAllowedOrigins(List.of("http://localhost:3000")); // Your frontend URL
+     *                 config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE")); // Allowed HTTP methods
+     *                 config.setAllowCredentials(true); // Allow cookies or Authorization headers
+     *                 config.setAllowedHeaders(List.of("Authorization", "Content-Type")); // Allow JWT token headers
+     *                 return config;
+     *             }))
+     *
+     *  CORS configuration when Frontend Server is set up, for now leave it commented.
+     *  Also, When ready you can add the cors where the ".cors(cors -> cors.disable())" is
+     *
+     */
+
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration) throws Exception {
