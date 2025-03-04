@@ -6,11 +6,13 @@ import io.github.bucket4j.Bucket4j;
 import io.github.bucket4j.Refill;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Component
 public class RateLimitFilter implements Filter {
 
     private final ConcurrentHashMap<String, Bucket> buckets = new ConcurrentHashMap<>();
@@ -26,6 +28,8 @@ public class RateLimitFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String ip = httpServletRequest.getRemoteAddr();
+
+        System.out.println("IP: " + ip);
 
         Bucket bucket = buckets.computeIfAbsent(ip, k -> createNewBucket());
 

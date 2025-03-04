@@ -39,7 +39,7 @@ public class JWTFilter extends OncePerRequestFilter {
             // Check if the Authorization header is present and starts with "Bearer "
             if (header != null && header.startsWith("Bearer ")) {
                 String token = header.substring(7); // Extract token
-                System.out.println("Processing token");
+                System.out.println("Processing token: " + token);
 
                 // Validate the token
                 if (jwtService.validateToken(token, jwtService.getUsername(token))) {

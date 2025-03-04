@@ -31,7 +31,7 @@ public class JWTService {
         Claims claims = extractClaims(token);
         System.out.println("All claims in token: "+ claims.toString());
         String role = claims.get("role", String.class);
-        System.out.println("Extracted role: ");
+        System.out.println("Extracted role: "+ role);
         return extractClaims(token).get("role", String.class);
     }
 
