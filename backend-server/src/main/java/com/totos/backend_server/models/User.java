@@ -32,7 +32,7 @@ public class User implements UserDetails {
 
     @Setter
     @Column(nullable = false)
-    private String role; // Example: "ADMIN", "USER"
+    private String role; // Example: "ADMIN", "USER", "API"
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

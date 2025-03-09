@@ -33,6 +33,12 @@ public class UserController {
     // Add a simple test endpoint
     @GetMapping("/test")
     public ResponseEntity<String> test() {
+//        User admin = new User();
+//        admin.setRole("ADMIN");
+//        admin.setUsername("admin");
+//        admin.setPassword(passwordEncoder.encode("admin123"));
+//        userRepository.save(admin);
+
         return ResponseEntity.ok("Auth endpoint is working!");
     }
 
