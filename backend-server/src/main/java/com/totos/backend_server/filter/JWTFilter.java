@@ -11,22 +11,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class JWTFilter extends OncePerRequestFilter {
+
     @Autowired
     private JWTService jwtService;
-
-//    @Override
-//    protected boolean shouldNotFilter(HttpServletRequest request) {
-//        String path = request.getServletPath();
-//        System.out.println("JWTFilter - Path: " + path + " - Skipping: " + path.startsWith("/api/auth/"));
-//        return path.startsWith("/api/auth/"); // Skip all /api/auth/** endpoints
-//    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
